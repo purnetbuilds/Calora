@@ -885,7 +885,7 @@ export default function DonutSections({
             />
           </motion.div>
 
-          <div className="overflow-hidden">
+          <div style={{ overflowX: "hidden", overflowY: "visible", padding: "8px 4px" }}>
             <AnimatePresence mode="wait" custom={testimonialDir}>
               <motion.div
                 key={testimonialPage}
