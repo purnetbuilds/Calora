@@ -59,7 +59,7 @@ export default function Navbar() {
         .nav-link:hover { color: var(--color-ink); }
         .nav-link-active { color: var(--color-ink); font-weight: 500; }
       `}</style>
-      <nav className="sticky top-0 z-50 w-full h-16">
+      <nav className="fixed top-0 left-0 right-0 z-50 h-16">
         {/* Background layer — opacity-only transition keeps this off the paint thread */}
         <div
           className="absolute inset-0 transition-opacity duration-300 pointer-events-none"
@@ -70,7 +70,7 @@ export default function Navbar() {
             boxShadow: "var(--shadow-sm)",
           }}
         />
-        <div className="relative z-10 max-w-[1440px] mx-auto px-4 md:px-8 h-full grid grid-cols-3 items-center">
+        <div className="relative z-10 max-w-[1440px] mx-auto px-4 md:px-8 h-full flex justify-between items-center md:grid md:grid-cols-3">
           {/* Logo — left column */}
           <Link
             to="/"
@@ -105,7 +105,7 @@ export default function Navbar() {
           </div>
 
           {/* Actions — right column */}
-          <div className="flex items-center gap-4 justify-self-end">
+          <div className="flex items-center gap-4 md:justify-self-end">
             <Link to="/checkout" className="relative p-2" aria-label="Shopping cart">
               <ShoppingBag size={20} style={{ color: "var(--color-ink)" }} />
               <AnimatePresence>
