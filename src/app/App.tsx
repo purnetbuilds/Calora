@@ -57,6 +57,7 @@ export default function App() {
         <ScrollToTop />
         <div className="min-h-screen w-full bg-[--color-cream] flex flex-col text-[--color-ink]">
           <Navbar />
+          <div className="h-16 shrink-0" aria-hidden="true" />
           <Routes>
             <Route path="/" element={<Home onOpenModal={() => setIsModalOpen(true)} />} />
             <Route path="/shop" element={<ShopPage />} />

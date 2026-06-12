@@ -188,7 +188,7 @@ export default function DonutLanding({
               Get Started
             </Button>
             <Link to="/shop">
-              <Button variant="ghost" size="lg" arrow>
+              <Button variant="ghost" size="lg" arrow className="!pl-0">
                 Explore Our Menu
               </Button>
             </Link>
