@@ -2,7 +2,7 @@
 import React, { useState, useRef, useCallback } from "react";
 import { Sparkles, X, Info } from "lucide-react";
 import * as Tooltip from "@radix-ui/react-tooltip";
-import { callClaude } from "../lib/anthropic";
+import { callClaude, DEMO_MODE } from "../lib/anthropic";
 import { ALL_PRODUCTS, Product } from "../data/products";
 import { getTasteProfile } from "./TasteProfileModal";
 
@@ -145,6 +145,22 @@ export default function SmartSearch({ onChange }: Props) {
       setIsLoading(true);
       setError(null);
       setResultMeta(null);
+
+      // Demo mode: skip the live API entirely, use the local search engine.
+      if (DEMO_MODE) {
+        await new Promise(r => setTimeout(r, 280)); // brief "thinking" beat
+        const local = localSearch(trimmed);
+        if (local.length > 0) {
+          onChange({ results: local, query: trimmed, isFallback: false });
+          setResultMeta({ count: local.length, isFallback: false });
+        } else {
+          const fallback = getFallback();
+          onChange({ results: fallback, query: trimmed, isFallback: true });
+          setResultMeta({ count: 0, isFallback: true });
+        }
+        setIsLoading(false);
+        return;
+      }
 
       try {
         const raw = await callClaude(

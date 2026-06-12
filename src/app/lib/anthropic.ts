@@ -1,9 +1,16 @@
-// AI-POWERED
-// Direct browser calls to the Anthropic Claude API.
-// Requires VITE_ANTHROPIC_API_KEY in .env.local
+// AI-POWERED (demo)
+// This is a portfolio demo. By default it runs in DEMO_MODE: no network
+// calls, no API key — the UI renders curated local/mock data instead.
+// To wire real Claude calls, set VITE_DEMO_MODE=false AND provide a
+// VITE_ANTHROPIC_API_KEY in .env.local.
 
 const ANTHROPIC_API_URL = "https://api.anthropic.com/v1/messages";
 export const DEFAULT_MODEL = "claude-sonnet-4-20250514";
+
+// Demo mode is ON unless explicitly disabled with a real key present.
+export const DEMO_MODE =
+  import.meta.env.VITE_DEMO_MODE !== "false" ||
+  !import.meta.env.VITE_ANTHROPIC_API_KEY;
 
 export interface ClaudeMessage {
   role: "user" | "assistant";
@@ -38,6 +45,8 @@ export async function callClaude(
 ): Promise<string> {
   const { model = DEFAULT_MODEL, maxTokens = 1024, system } = options;
 
+  if (DEMO_MODE) throw new Error("demo-mode: no live API");
+
   const res = await fetch(ANTHROPIC_API_URL, {
     method: "POST",
     headers: headers(),
@@ -65,6 +74,8 @@ export async function streamClaude(
   const { model = DEFAULT_MODEL, maxTokens = 512, system, onChunk, onDone, onError } = options;
 
   try {
+    if (DEMO_MODE) throw new Error("demo-mode: no live API");
+
     const res = await fetch(ANTHROPIC_API_URL, {
       method: "POST",
       headers: headers(),

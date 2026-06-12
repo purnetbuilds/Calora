@@ -3,7 +3,7 @@ import React, { useState, useRef, useEffect, useCallback } from "react";
 import { Sparkles } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { useCart } from "../context/CartContext";
-import { streamClaude } from "../lib/anthropic";
+import { streamClaude, DEMO_MODE } from "../lib/anthropic";
 import { Button, Badge, Card } from "@/components/ui";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -159,6 +159,16 @@ export default function ProductCard({
     setIsStreaming(true);
     setStreamError(null);
     buffer.current = "";
+
+    // Demo mode: skip the live API, serve curated mock flavor notes.
+    if (DEMO_MODE) {
+      await new Promise(r => setTimeout(r, 420)); // brief skeleton beat
+      const mock = getMockFlavor(name, description);
+      cache.current = mock;
+      setAiData(mock);
+      setIsStreaming(false);
+      return;
+    }
 
     await streamClaude(
       [{ role: "user", content: `Name: ${name}\nDescription: ${description}\nCalories: ${calories}` }],
